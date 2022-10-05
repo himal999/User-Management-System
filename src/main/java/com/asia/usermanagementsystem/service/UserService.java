@@ -12,4 +12,5 @@ public interface UserService {
     UserDTO addUser(UserDTO userDTO);
     List<UserDTO> allUser();
     UserDTO updateUser(Long id,UserDTO userDTO);
+    UserDTO findUser (Long id);
 }

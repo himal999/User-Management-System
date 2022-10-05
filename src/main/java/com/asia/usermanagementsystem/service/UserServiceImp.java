@@ -51,4 +51,17 @@ public class UserServiceImp implements UserService{
         userRepository.save(isUser);
         return userDTO;
     }
+
+    @Override
+    public UserDTO findUser(Long id) {
+        User user = userRepository.findById(id).get();
+        UserDTO userDto = new UserDTO(
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail()
+        );
+
+        return userDto;
+    }
 }

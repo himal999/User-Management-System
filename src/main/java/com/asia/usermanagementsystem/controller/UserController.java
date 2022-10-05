@@ -8,6 +8,7 @@ import com.asia.usermanagementsystem.service.UserService;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.LinkOption;
 import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
@@ -24,7 +25,7 @@ public class UserController {
     }
 
 
-    //add user hadler method
+
     @PostMapping("/create-user")
     public UserDTO addUser(@RequestBody UserDTO userDTO){
 
@@ -39,5 +40,10 @@ public class UserController {
     @PutMapping(path = "/{id}")
     public UserDTO updateUser(@PathVariable("id") Long id,@ModelAttribute UserDTO userDTO){
         return userService.updateUser(id,userDTO);
+    }
+
+    @GetMapping("/find")
+    public UserDTO findUser(@RequestParam("id") Long id){
+        return userService.findUser(id);
     }
 }
