@@ -9,9 +9,13 @@ import java.util.List;
 
 
 public interface UserService {
-    UserDTO addUser(UserDTO userDTO);
+    Boolean addUser(UserDTO userDTO);
+
     List<UserDTO> allUser();
-    UserDTO updateUser(Long id,UserDTO userDTO);
-    UserDTO findUser (Long id);
-    UserDTO deleteUser(Long id);
+
+    Boolean updateUser(Long id, UserDTO userDTO);
+
+    UserDTO findUser(Long id);
+
+    Boolean deleteUser(Long id);
 }

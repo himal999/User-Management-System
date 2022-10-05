@@ -5,13 +5,8 @@ version : 0.0.1
 
 import com.asia.usermanagementsystem.model.UserDTO;
 import com.asia.usermanagementsystem.service.UserService;
-
+import com.asia.usermanagementsystem.util.Response;
 import org.springframework.web.bind.annotation.*;
-
-import java.nio.file.LinkOption;
-import java.util.Collection;
-import java.util.List;
-import java.util.Vector;
 
 @RestController
 @RequestMapping("/user")
@@ -20,39 +15,37 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService){
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
 
     //add new user
-
     @PostMapping("/create-user")
-    public UserDTO addUser(@RequestBody UserDTO userDTO){
-
-        return userService.addUser(userDTO);
+    public Response addUser(@RequestBody UserDTO userDTO) {
+        return new Response(200, userService.addUser(userDTO), "ok");
     }
 
     //get all users
     @GetMapping
-    public List<UserDTO> allUser(){
-        return userService.allUser();
+    public Response allUser() {
+        return new Response(200, userService.allUser(), "ok");
     }
 
     //update user details
     @PutMapping(path = "/{id}")
-    public UserDTO updateUser(@PathVariable("id") Long id,@ModelAttribute UserDTO userDTO){
-        return userService.updateUser(id,userDTO);
+    public Response updateUser(@PathVariable("id") Long id, @ModelAttribute UserDTO userDTO) {
+        return new Response(200, userService.updateUser(id, userDTO), "ok");
     }
 
     //find single user
     @GetMapping("/find")
-    public UserDTO findUser(@RequestParam("id") Long id){
-        return userService.findUser(id);
+    public Response findUser(@RequestParam("id") Long id) {
+        return new Response(200, userService.findUser(id), "ok");
     }
 
     @DeleteMapping
-    public UserDTO removeUser(@RequestParam("id")Long id){
-      return   userService.deleteUser(id);
+    public Response removeUser(@RequestParam("id") Long id) {
+        return new Response(200, userService.deleteUser(id), "ok");
     }
 }

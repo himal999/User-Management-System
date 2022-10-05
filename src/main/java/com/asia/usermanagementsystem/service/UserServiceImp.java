@@ -9,83 +9,96 @@ import com.asia.usermanagementsystem.repository.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
+import java.io.UncheckedIOException;
 import java.util.List;
-
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImp implements UserService{
-    private  final UserRepository userRepository;
+public class UserServiceImp implements UserService {
+    private final UserRepository userRepository;
+    private User user;
 
-    public UserServiceImp(UserRepository userRepository){
+    public UserServiceImp(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
-    public UserDTO addUser(UserDTO userDTO) {
-        User user = new User();
-        BeanUtils.copyProperties(userDTO,user);
-        userRepository.save(user);
-        return userDTO;
+    public Boolean addUser(UserDTO userDTO) {
+
+        try {
+            user = new User();
+            BeanUtils.copyProperties(userDTO, user);
+            userRepository.save(user);
+            return true;
+        } catch (UncheckedIOException e) {
+            throw new RuntimeException("User Added Failed !!!");
+        }
+
+
     }
 
     @Override
     public List<UserDTO> allUser() {
-        List<User> allUsers = userRepository.findAll();
-        List<UserDTO> allUsersDTO = allUsers.stream().map(user -> new UserDTO(
-                user.getId(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail()
-        )).collect(Collectors.toList());
-        return allUsersDTO;
+
+        try {
+            List<User> allUsers = userRepository.findAll();
+            List<UserDTO> allUsersDTO = allUsers.stream().map(user -> new UserDTO(
+                    user.getId(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getEmail()
+            )).collect(Collectors.toList());
+            return allUsersDTO;
+        } catch (UncheckedIOException e) {
+            throw new RuntimeException("Failed to load Users");
+        }
+
     }
 
     @Override
-    public UserDTO updateUser(Long id,UserDTO userDTO) {
+    public Boolean updateUser(Long id, UserDTO userDTO) {
 
-        User isUser = userRepository.findById(id).get();
-        isUser.setFirstName(userDTO.getFirstName());
-        isUser.setLastName(userDTO.getLastName());
-        isUser.setEmail(userDTO.getEmail());
-        userRepository.save(isUser);
-        return userDTO;
+        if (userRepository.findById(id).isPresent()) {
+            user = userRepository.findById(id).get();
+            user.setFirstName(userDTO.getFirstName());
+            user.setLastName(userDTO.getLastName());
+            user.setEmail(userDTO.getEmail());
+            userRepository.save(user);
+            return true;
+        } else {
+            throw new RuntimeException("Not Present User !!!");
+        }
+
+
     }
 
     @Override
     public UserDTO findUser(Long id) {
-        User user = userRepository.findById(id).get();
-        UserDTO userDto = new UserDTO(
-                user.getId(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail()
-        );
 
-        return userDto;
-    }
-
-    @Override
-    public UserDTO deleteUser(Long id) {
-
-        if(userRepository.findById(id).isPresent()){
-            User user = userRepository.findById(id).get();
-            UserDTO userDTO = new UserDTO(
+        if (userRepository.findById(id).isPresent()) {
+            user = userRepository.findById(id).get();
+            UserDTO userDto = new UserDTO(
                     user.getId(),
                     user.getFirstName(),
                     user.getLastName(),
                     user.getEmail()
             );
-            userRepository.deleteById(id);
-            return userDTO;
-        }else{
-            UserDTO userDTO = new UserDTO(
-                 1,"1","1","1"
-            );
 
-            return userDTO;
+            return userDto;
+        } else {
+            throw new RuntimeException("Not Present User !!!");
+        }
+
+    }
+
+    @Override
+    public Boolean deleteUser(Long id) {
+
+        if (userRepository.findById(id).isPresent()) {
+            userRepository.deleteById(id);
+            return true;
+        } else {
+            throw new RuntimeException("Not Present User !!!");
         }
 
 
