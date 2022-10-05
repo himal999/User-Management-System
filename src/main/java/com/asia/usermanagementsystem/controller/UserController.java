@@ -6,10 +6,12 @@ version : 0.0.1
 import com.asia.usermanagementsystem.model.UserDTO;
 import com.asia.usermanagementsystem.service.UserService;
 import com.asia.usermanagementsystem.util.Response;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
+@ResponseStatus(HttpStatus.OK)
 public class UserController {
 
 
