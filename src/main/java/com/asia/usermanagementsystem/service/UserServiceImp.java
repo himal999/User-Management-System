@@ -9,8 +9,10 @@ import com.asia.usermanagementsystem.repository.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,5 +65,29 @@ public class UserServiceImp implements UserService{
         );
 
         return userDto;
+    }
+
+    @Override
+    public UserDTO deleteUser(Long id) {
+
+        if(userRepository.findById(id).isPresent()){
+            User user = userRepository.findById(id).get();
+            UserDTO userDTO = new UserDTO(
+                    user.getId(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getEmail()
+            );
+            userRepository.deleteById(id);
+            return userDTO;
+        }else{
+            UserDTO userDTO = new UserDTO(
+                 1,"1","1","1"
+            );
+
+            return userDTO;
+        }
+
+
     }
 }

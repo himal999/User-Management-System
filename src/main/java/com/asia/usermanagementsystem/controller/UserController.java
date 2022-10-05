@@ -25,6 +25,7 @@ public class UserController {
     }
 
 
+    //add new user
 
     @PostMapping("/create-user")
     public UserDTO addUser(@RequestBody UserDTO userDTO){
@@ -32,18 +33,26 @@ public class UserController {
         return userService.addUser(userDTO);
     }
 
+    //get all users
     @GetMapping
     public List<UserDTO> allUser(){
         return userService.allUser();
     }
 
+    //update user details
     @PutMapping(path = "/{id}")
     public UserDTO updateUser(@PathVariable("id") Long id,@ModelAttribute UserDTO userDTO){
         return userService.updateUser(id,userDTO);
     }
 
+    //find single user
     @GetMapping("/find")
     public UserDTO findUser(@RequestParam("id") Long id){
         return userService.findUser(id);
+    }
+
+    @DeleteMapping
+    public UserDTO removeUser(@RequestParam("id")Long id){
+      return   userService.deleteUser(id);
     }
 }
