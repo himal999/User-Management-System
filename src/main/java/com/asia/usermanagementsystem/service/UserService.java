@@ -11,4 +11,5 @@ import java.util.List;
 public interface UserService {
     UserDTO addUser(UserDTO userDTO);
     List<UserDTO> allUser();
+    UserDTO updateUser(Long id,UserDTO userDTO);
 }

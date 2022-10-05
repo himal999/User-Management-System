@@ -35,4 +35,9 @@ public class UserController {
     public List<UserDTO> allUser(){
         return userService.allUser();
     }
+
+    @PutMapping(path = "/{id}")
+    public UserDTO updateUser(@PathVariable("id") Long id,@ModelAttribute UserDTO userDTO){
+        return userService.updateUser(id,userDTO);
+    }
 }

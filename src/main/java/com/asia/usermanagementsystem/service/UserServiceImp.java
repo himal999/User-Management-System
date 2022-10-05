@@ -10,7 +10,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Vector;
+
 import java.util.stream.Collectors;
 
 @Service
@@ -39,5 +39,16 @@ public class UserServiceImp implements UserService{
                 user.getEmail()
         )).collect(Collectors.toList());
         return allUsersDTO;
+    }
+
+    @Override
+    public UserDTO updateUser(Long id,UserDTO userDTO) {
+
+        User isUser = userRepository.findById(id).get();
+        isUser.setFirstName(userDTO.getFirstName());
+        isUser.setLastName(userDTO.getLastName());
+        isUser.setEmail(userDTO.getEmail());
+        userRepository.save(isUser);
+        return userDTO;
     }
 }
