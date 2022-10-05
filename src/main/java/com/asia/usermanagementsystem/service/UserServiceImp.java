@@ -9,6 +9,10 @@ import com.asia.usermanagementsystem.repository.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Vector;
+import java.util.stream.Collectors;
+
 @Service
 public class UserServiceImp implements UserService{
     private  final UserRepository userRepository;
@@ -23,5 +27,17 @@ public class UserServiceImp implements UserService{
         BeanUtils.copyProperties(userDTO,user);
         userRepository.save(user);
         return userDTO;
+    }
+
+    @Override
+    public List<UserDTO> allUser() {
+        List<User> allUsers = userRepository.findAll();
+        List<UserDTO> allUsersDTO = allUsers.stream().map(user -> new UserDTO(
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail()
+        )).collect(Collectors.toList());
+        return allUsersDTO;
     }
 }
